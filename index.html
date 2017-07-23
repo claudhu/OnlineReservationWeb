@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- read me -->
+<head>
+    <title>Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/semantic.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/components/dropdown.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/components/input.min.css">
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/semantic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/components/dropdown.min.js"></script>
+
+    <script src=""></script>
+    <style>
+        body {
+            background-color: lavender;
+        }
+    </style>
+
+</head>
+<body>
+<div class="ui middle aligned center aligned grid container">
+    <div class="column">
+        <h2 class="ui teal image header">
+            <div class="content" style="color:midnightblue ">
+                <br>
+                <i class="fa fa-user-circle" aria-hidden="true"></i>
+                光澤診所|台北忠孝<br>線上預約
+            </div>
+
+        </h2>
+        <div style="margin-bottom: 10px">
+            <div>
+                <a class="ui green image label">
+                    已經使用本系統的預約人數
+                    <div class="detail">5,5555人</div>
+                </a>
+            </div>
+            <div>
+                <a class="ui yellow label"><i class="fa fa-circle" aria-hidden="true"></i>
+                    線上預約肉毒 999</a>
+            </div>
+
+        </div>
+
+        <form action="https://lineboot.herokuapp.com/booking/1" method="post" class="ui form large">
+            <div class="ui stacked segment">
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon" aria-hidden="true"></i>
+                        <input name="CutomerName" type="text" placeholder="您的大名">
+                    </div>
+                </div>
+
+                <div class="field" hidden>
+
+                    <label for="Agent-Name">AgentCode</label>
+                    <input name="Agent-Name" type="text">
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="calendar icon" aria-hidden="true"></i>
+                        <input name="BookingTime" type="datetime-local" placeholder="預約時間">
+                    </div>
+                </div>
+                <div class="field">
+
+                    <div class="ui left icon input">
+                        <i class="doctor icon" aria-hidden="true"></i>
+                        <input name="Item" type="text" placeholder="諮詢的項目">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon  input">
+                        <i class="money icon" aria-hidden="true"></i>
+                        <input name="DiscountCode" type="text" placeholder="請輸入光澤碼" disabled="">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="comments icon" aria-hidden="true"></i>
+                        <input name="CustomerComment" type="text" placeholder="留言給我們">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="ui right labeled input">
+                        <input id="account_id" placeholder="聯絡方式" type="text">
+                        <div class="ui dropdown label">
+                            <div id="ContactId" class="text">電話號碼</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="item">電話號碼</div>
+                                <div class="item">LINE帳號</div>
+                                <div class="item">微信帳號</div>
+                            </div>
+                            <input type="text" hidden>
+                        </div>
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <label for="fruit">你第一次來光澤嗎?</label>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="fruit" checked="True" tabindex="0" class="hidden">
+                            <label>第一次來光澤</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="fruit" tabindex="0" class="hidden">
+                            <label>我已經來過光澤很多次了</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui horizontal divider">你完成了嗎</div>
+                <div class="ui buttons">
+                    <button class="ui button">加入LINE@</button>
+                    <div class="or"></div>
+                    <button onclick=changeStatusOfConfirm() class="ui positive button" type="submit">聯絡我啦</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    var drshine_code = location.hash
+    var form = document.forms[0];
+    form.querySelector('input[name="BookingTime"]').value = new Date().toISOString().substr(0, 16);
+
+    function checkForm(drshine_code) {
+        var form = document.forms[0];
+        var selectElement = form.querySelector('input[name="DiscountCode"]');
+        selectElement.value = drshine_code
+    }
+
+    checkForm(drshine_code);
+    $('.ui.dropdown')
+        .dropdown({
+            onChange: function () {
+                // 聯絡方式
+                type = this.querySelector('#ContactId').innerHTML;
+                content = document.querySelector('#account_id').value
+            }
+        });
+    $('.ui.radio.checkbox')
+        .checkbox()
+    ;
+    function changeStatusOfConfirm() {
+        document.querySelector('button[type=submit]').className += " loading";
+    }
+
+    if (location.hash == '#weibo') {
+        document.querySelector('#ContactId').innerHTML = "微信帳號"
+    }
+
+
+</script>
+</body>
+</html>
